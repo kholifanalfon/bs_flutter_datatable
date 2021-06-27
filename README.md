@@ -1,15 +1,97 @@
 # bs_flutter_datatable
 
-A new Flutter project.
+Simple way to show data using datatable response with serverside processing
+
+![Alt text](https://raw.githubusercontent.com/kholifanalfon/bs_flutter_datatable/main/screenshot/example.png "Datatables Example")
+
+Feature:
+- Customize style
+- Searchable data
+- Pagination
+- Pagelength
+- Orderable
+- Serverside processing
+
 
 ## Getting Started
 
-This project is a starting point for a Flutter
-[plug-in package](https://flutter.dev/developing-packages/),
-a specialized package that includes platform-specific implementation code for
-Android and/or iOS.
+Add the dependency in `pubspec.yaml`:
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```yaml
+dependencies:
+  ...
+  bs_flutter_datatable: any
+```
 
+## Datatables
+Example: [`main.dart`](https://github.com/kholifanalfon/bs_flutter_datatable/blob/main/example/lib/main.dart)
+
+To create a select box you need to import:
+
+```dart
+import 'package:bs_flutter_datatable/bs_flutter_datatable.dart';
+```
+
+Create source datatable:
+```dart
+import 'package:bs_flutter_datatable/bs_flutter_datatable.dart';
+import 'package:flutter/material.dart';
+
+class ExampleSource extends BsDatatableSource {
+
+  BsDatatableResponse _response;
+
+  ExampleSource({
+    BsDatatableResponse response = const BsDatatableResponse(),
+  }) : _response = response;
+
+  @override
+  // TODO: implement countData
+  int get countData => _response.countData;
+
+  @override
+  // TODO: implement countDataPage
+  int get countDataPage => _response.data.length;
+
+  @override
+  // TODO: implement countFiltered
+  int get countFiltered => _response.countFiltered;
+
+  @override
+  BsDataRow getRow(int index) {
+    return BsDataRow(
+      index: index,
+      cells: <BsDataCell>[
+        BsDataCell(Text('${_response.start + index + 1}')),
+        BsDataCell(Text('${_response.data[index]['typecd']}')),
+        BsDataCell(Text('${_response.data[index]['typename']}')),
+      ]
+    );
+  }
+
+}
+```
+
+declare source and controller datatable:
+
+```dart
+ExampleSource _source = ExampleSource();
+BsDatatableController _controller = BsDatatableController();
+```
+
+create table view:
+
+```dart
+// ...
+  BsDatatable(
+    source: _source,
+    controller: _controller,
+    columns: <BsDataColumn>[
+      BsDataColumn(label: Text('No'), orderable: false, searchable: false, width: 100.0),
+      BsDataColumn(label: Text('Code'), width: 200.0,),
+      BsDataColumn(label: Text('Name')),
+    ],
+    serverSide: loadApi,
+  )
+// ...
+```
