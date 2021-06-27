@@ -86,6 +86,9 @@ create table view:
   BsDatatable(
     source: _source,
     controller: _controller,
+    searchable: true,
+    pageLength: true,
+    paginations: ['firstPage', 'previous', 'button', 'next', 'lastPage'],
     columns: <BsDataColumn>[
       BsDataColumn(label: Text('No'), orderable: false, searchable: false, width: 100.0),
       BsDataColumn(label: Text('Code'), width: 200.0,),

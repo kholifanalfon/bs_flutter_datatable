@@ -2,6 +2,9 @@ import 'dart:async';
 
 import 'package:bs_flutter_datatable/bs_flutter_datatable.dart';
 import 'package:bs_flutter_datatable/src/utils/bs_serverside.dart';
+import 'package:bs_flutter_responsive/bs_flutter_responsive.dart';
+import 'package:bs_flutter_utils/bs_flutter_utils.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -22,14 +25,6 @@ class BsDatatable extends StatefulWidget {
     this.paginations = const ['firstPage', 'previous', 'button', 'next', 'lastPage'],
     this.notFoundText,
     this.processingText,
-    this.prependLeftHeader = const [],
-    this.appendLeftHeader = const [],
-    this.prependRightHeader = const [],
-    this.appendRightHeader = const [],
-    this.prependLeftFooter = const [],
-    this.appendLeftFooter = const [],
-    this.prependRightFooter = const [],
-    this.appendRightFooter = const [],
     this.textInfo,
     this.textInfoStyle,
     this.style = const BsDatatableStyle(),
@@ -59,22 +54,6 @@ class BsDatatable extends StatefulWidget {
   final bool pageLength;
 
   final TextStyle? hintStyleSearch;
-
-  final List<Widget> prependLeftHeader;
-
-  final List<Widget> appendLeftHeader;
-
-  final List<Widget> prependRightHeader;
-
-  final List<Widget> appendRightHeader;
-
-  final List<Widget> prependLeftFooter;
-
-  final List<Widget> appendLeftFooter;
-
-  final List<Widget> prependRightFooter;
-
-  final List<Widget> appendRightFooter;
 
   final Widget? textInfo;
 
@@ -193,164 +172,166 @@ class _BsDatatableState extends State<BsDatatable> {
     return Container(
       child: Column(
         children: [
-          Container(
-            margin: EdgeInsets.only(bottom: 10.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  child: Row(
-                    children: [
-                      Column(children: widget.prependLeftHeader),
-                      DefaultTextStyle(
-                        style: TextStyle(
-                          fontSize: 18.0,
-                        ).merge(widget.titleTextStyle),
-                        child: widget.title != null ? widget.title! : Text('Table Title')
-                      ),
-                      Column(children: widget.appendLeftHeader),
-                    ],
-                  ),
+          BsRow(
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              BsCol(
+                margin: EdgeInsets.only(bottom: 10.0),
+                sizes: ColScreen(sm: Col.col_12, md: Col.col_6, lg: Col.col_8, xl: Col.col_9),
+                child: DefaultTextStyle(
+                  style: TextStyle(
+                    fontSize: 18.0,
+                  ).merge(widget.titleTextStyle),
+                  child: widget.title != null ? widget.title! : Text('Table Title')
                 ),
-                Container(
-                  child: Row(
-                    children: [
-                      Column(children: widget.prependRightHeader),
-                      widget.pageLength == false ? Container() : Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            margin: EdgeInsets.only(bottom: 2.0),
-                            child: Text(widget.language.perPageLabel, style: TextStyle(
+              ),
+              BsCol(
+                margin: EdgeInsets.only(bottom: 10.0),
+                sizes: ColScreen(sm: Col.col_12, md: Col.col_6, lg: Col.col_4, xl: Col.col_3),
+                child: Row(
+                  mainAxisAlignment: BreakPoint.of(context).state == BreakPoint.stateSm ? MainAxisAlignment.start : MainAxisAlignment.end,
+                  children: [
+                    widget.pageLength == false ? Container() : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(bottom: 2.0),
+                          child: Text(widget.language.perPageLabel, style: TextStyle(
                               fontSize: 10.0
-                            )),
-                          ),
-                          Container(
-                            width: 60.0,
-                            margin: EdgeInsets.only(right: 5.0),
-                            decoration: BoxDecoration(
+                          )),
+                        ),
+                        Container(
+                          width: 60.0,
+                          margin: EdgeInsets.only(right: 5.0),
+                          decoration: BoxDecoration(
                               color: Colors.white,
                               border: Border.all(color: widget.style.borderColor),
                               borderRadius: BorderRadius.all(Radius.circular(5.0))
-                            ),
-                            child: TextField(
-                              controller: _inputLength,
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                contentPadding: EdgeInsets.only(left: 10.0, right: 10.0, top: 12.0, bottom: 12.0),
-                                hintStyle: TextStyle(
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.w100,
-                                  color: Colors.grey
-                                ),
-                                isDense: true,
-                              ),
-                              keyboardType: TextInputType.number,
-                              inputFormatters: [
-                                FilteringTextInputFormatter.digitsOnly
-                              ],
-                              onChanged: (value) => doneTyping(value, (value) {
-                                if(value == '' || int.parse(value) <= 0) {
-                                  widget.controller.start = 0;
-                                  widget.controller.length = 10;
-                                  _inputLength.text = '10';
-                                  widget.controller.refresh();
-                                } else {
-                                  int length = int.parse(value);
-                                  
-                                  widget.controller.start = 0;
-                                  widget.controller.length = length;
-                                  widget.controller.refresh();
-                                }
-                              }),
-                            ),
-                          )
-                        ],
-                      ),
-                      widget.searchable == false ? Container() : Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            margin: EdgeInsets.only(bottom: 2.0),
-                            child: Text(widget.language.searchLabel, style: TextStyle(
-                              fontSize: 10.0
-                            )),
                           ),
-                          Container(
-                            width: 250.0,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(color: widget.style.borderColor),
-                              borderRadius: BorderRadius.all(Radius.circular(5.0))
-                            ),
-                            child: TextField(
-                              controller: _inputSearch,
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                contentPadding: EdgeInsets.only(left: 10.0, right: 10.0, top: 12.0, bottom: 12.0),
-                                hintText: widget.language.hintTextSearch,
-                                hintStyle: TextStyle(
+                          child: TextField(
+                            controller: _inputLength,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              contentPadding: EdgeInsets.only(left: 10.0, right: 10.0, top: 12.0, bottom: 12.0),
+                              hintStyle: TextStyle(
                                   fontSize: 14.0,
                                   fontWeight: FontWeight.w100,
                                   color: Colors.grey
-                                ).merge(widget.hintStyleSearch),
-                                isDense: true,
                               ),
-                              onChanged: (value) => doneTyping(value, (value) {
-                                widget.controller.searchValue = value;
+                              isDense: true,
+                            ),
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly
+                            ],
+                            onChanged: (value) => doneTyping(value, (value) {
+                              if(value == '' || int.parse(value) <= 0) {
                                 widget.controller.start = 0;
+                                widget.controller.length = 10;
+                                _inputLength.text = '10';
                                 widget.controller.refresh();
-                              }),
+                              } else {
+                                int length = int.parse(value);
+
+                                widget.controller.start = 0;
+                                widget.controller.length = length;
+                                widget.controller.refresh();
+                              }
+                            }),
+                          ),
+                        )
+                      ],
+                    ),
+                    widget.searchable == false ? Container() : Expanded(child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(bottom: 2.0),
+                          child: Text(widget.language.searchLabel, style: TextStyle(
+                            fontSize: 10.0
+                          )),
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(color: widget.style.borderColor),
+                            borderRadius: BorderRadius.all(Radius.circular(5.0))
+                          ),
+                          child: TextField(
+                            controller: _inputSearch,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              contentPadding: EdgeInsets.only(left: 10.0, right: 10.0, top: 12.0, bottom: 12.0),
+                              hintText: widget.language.hintTextSearch,
+                              hintStyle: TextStyle(
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w100,
+                                color: Colors.grey
+                              ).merge(widget.hintStyleSearch),
+                              isDense: true,
                             ),
-                          )
-                        ],
-                      ),
-                      Column(children: widget.appendRightHeader)
-                    ],
-                  ),
-                )
-              ],
-            ),
+                            onChanged: (value) => doneTyping(value, (value) {
+                              widget.controller.searchValue = value;
+                              widget.controller.start = 0;
+                              widget.controller.refresh();
+                            }),
+                          ),
+                        )
+                      ],
+                    )),
+                  ],
+                ),
+              ),
+            ],
           ),
           Container(
             margin: EdgeInsets.only(bottom: 10.0),
             child: Row(children: [Expanded(child: table())]),
           ),
-          Container(
-            margin: EdgeInsets.only(bottom: 10.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Row(
-                  children: [
-                    Column(children: widget.prependLeftFooter),
-                    Container(child: textInformation()),
-                    Column(children: widget.appendLeftFooter)
-                  ],
+          BsRow(
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              BsCol(
+                margin: EdgeInsets.only(bottom: 10.0),
+                sizes: ColScreen(sm: Col.col_12, md: Col.col_6),
+                child: Scrollbar(child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Container(child: textInformation()),
+                )),
+              ),
+              BsCol(
+                margin: EdgeInsets.only(bottom: 10.0),
+                sizes: ColScreen(sm: Col.col_12, md: Col.col_6),
+                child: Container(
+                  child: Row(
+                    children: [
+                      Expanded(child: Container(
+                        alignment: Alignment.centerRight,
+                        child: Scrollbar(child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: pagination(),
+                        )),
+                      ))
+                    ],
+                  )
                 ),
-                Row(
-                  children: [
-                    Column(children: widget.prependRightFooter),
-                    Container(child: pagination()),
-                    Column(children: widget.appendRightFooter)
-                  ],
-                )
-              ],
-            ),
-          )
+              ),
+            ],
+          ),
         ],
       ),
     );
   }
 
-  Map<int, TableColumnWidth> get columnsWidths {
+  Map<int, TableColumnWidth> columnsWidths(BuildContext context) {
     Map<int, TableColumnWidth> _columnsWidths = Map<int, TableColumnWidth>();
 
     _currentColumns.forEach((column) {
       if(column.width != null)
         _columnsWidths.addAll({_currentColumns.indexOf(column): FixedColumnWidth(column.width!)});
+      else if([BreakPoint.stateXs, BreakPoint.stateSm, BreakPoint.stateMd].contains(BreakPoint.of(context).state))
+        _columnsWidths.addAll({_currentColumns.indexOf(column): FixedColumnWidth(200)});
+
     });
 
     return _columnsWidths;
@@ -441,7 +422,7 @@ class _BsDatatableState extends State<BsDatatable> {
                     ConstrainedBox(
                       constraints: BoxConstraints(minWidth: constraints.maxWidth),
                       child: Table(
-                        columnWidths: columnsWidths,
+                        columnWidths: columnsWidths(context),
                         children: tableRows,
                       ),
                     ),

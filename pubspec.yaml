@@ -12,7 +12,8 @@ dependencies:
     sdk: flutter
   flutter_web_plugins:
     sdk: flutter
-  bs_flutter_selectbox: ^1.0.0
+  bs_flutter_responsive: ^1.0.0
+  bs_flutter_utils: ^1.0.0
 
 dev_dependencies:
   flutter_test:
