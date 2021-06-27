@@ -24,10 +24,12 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future loadApi(Map<String, dynamic> params) {
-    return http.post(
+    return http
+        .post(
       Uri.parse('http://localhost/api-datatables.php'),
       body: params,
-    ).then((value) {
+    )
+        .then((value) {
       Map<String, dynamic> json = jsonDecode(value.body);
       setState(() {
         _source = ExampleSource(
@@ -53,9 +55,19 @@ class _MyAppState extends State<MyApp> {
                 controller: _controller,
                 searchable: true,
                 pageLength: true,
-                paginations: ['firstPage', 'previous', 'button', 'next', 'lastPage'],
+                paginations: [
+                  'firstPage',
+                  'previous',
+                  'button',
+                  'next',
+                  'lastPage'
+                ],
                 columns: <BsDataColumn>[
-                  BsDataColumn(label: Text('No'), orderable: false, searchable: false, width: 100.0),
+                  BsDataColumn(
+                      label: Text('No'),
+                      orderable: false,
+                      searchable: false,
+                      width: 100.0),
                   BsDataColumn(label: Text('Code'), width: 200.0),
                   BsDataColumn(label: Text('Name')),
                 ],

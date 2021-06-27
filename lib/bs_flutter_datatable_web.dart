@@ -31,7 +31,8 @@ class BsFlutterDatatableWeb {
       default:
         throw PlatformException(
           code: 'Unimplemented',
-          details: 'bs_flutter_datatable for web doesn\'t implement \'${call.method}\'',
+          details:
+              'bs_flutter_datatable for web doesn\'t implement \'${call.method}\'',
         );
     }
   }

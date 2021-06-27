@@ -1,6 +1,4 @@
-
 class BsDatatableLanguage {
-
   const BsDatatableLanguage({
     this.perPageLabel = 'Perpage',
     this.searchLabel = 'Search',

@@ -1,6 +1,3 @@
-typedef BsDatatableServerSide = Future Function(
-    Map<String, dynamic> params);
+typedef BsDatatableServerSide = Future Function(Map<String, dynamic> params);
 
-class BsDatatableResponse {
-
-}
+class BsDatatableResponse {}

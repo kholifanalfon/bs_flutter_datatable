@@ -1,5 +1,4 @@
 class BsDatatableResponse {
-
   const BsDatatableResponse({
     this.draw = 0,
     this.start = 1,

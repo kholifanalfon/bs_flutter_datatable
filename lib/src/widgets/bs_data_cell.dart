@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class BsDataCell extends StatelessWidget {
-
-  const BsDataCell(this.child, {
+  const BsDataCell(
+    this.child, {
     Key? key,
   }) : super(key: key);
 
@@ -15,5 +15,4 @@ class BsDataCell extends StatelessWidget {
       child: child,
     );
   }
-  
 }

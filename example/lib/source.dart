@@ -2,7 +2,6 @@ import 'package:bs_flutter_datatable/bs_flutter_datatable.dart';
 import 'package:flutter/material.dart';
 
 class ExampleSource extends BsDatatableSource {
-
   BsDatatableResponse _response;
 
   ExampleSource({
@@ -23,14 +22,10 @@ class ExampleSource extends BsDatatableSource {
 
   @override
   BsDataRow getRow(int index) {
-    return BsDataRow(
-      index: index,
-      cells: <BsDataCell>[
-        BsDataCell(Text('${_response.start + index + 1}')),
-        BsDataCell(Text('${_response.data[index]['typecd']}')),
-        BsDataCell(Text('${_response.data[index]['typename']}')),
-      ]
-    );
+    return BsDataRow(index: index, cells: <BsDataCell>[
+      BsDataCell(Text('${_response.start + index + 1}')),
+      BsDataCell(Text('${_response.data[index]['typecd']}')),
+      BsDataCell(Text('${_response.data[index]['typename']}')),
+    ]);
   }
-
 }

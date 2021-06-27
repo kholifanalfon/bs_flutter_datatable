@@ -1,7 +1,6 @@
 import 'package:bs_flutter_datatable/bs_flutter_datatable.dart';
 
 abstract class BsDatatableSource {
-
   int get countData;
 
   int get countFiltered;
