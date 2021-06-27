@@ -2,6 +2,7 @@
   <library name="Flutter Plugins" type="FlutterPluginsLibraryType">
     <CLASSES>
       <root url="file://$PROJECT_DIR$" />
+      <root url="file://$PROJECT_DIR$/../../../android/sdk/flutter/.pub-cache/hosted/pub.dartlang.org/bs_flutter_selectbox-1.0.0" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
