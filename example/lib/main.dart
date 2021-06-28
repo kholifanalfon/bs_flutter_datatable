@@ -26,14 +26,14 @@ class _MyAppState extends State<MyApp> {
   Future loadApi(Map<String, dynamic> params) {
     return http
         .post(
-      Uri.parse('http://localhost/api-datatables.php'),
+      Uri.parse('http://localhost/flutter_crud/api/public/types/datatables'),
       body: params,
     )
         .then((value) {
       Map<String, dynamic> json = jsonDecode(value.body);
       setState(() {
         _source = ExampleSource(
-          response: BsDatatableResponse.createFromJson(json),
+          response: BsDatatableResponse.createFromJson(json['data']),
         );
       });
     });
@@ -66,8 +66,8 @@ class _MyAppState extends State<MyApp> {
                       orderable: false,
                       searchable: false,
                       width: 100.0),
-                  BsDataColumn(label: Text('Code'), width: 200.0),
-                  BsDataColumn(label: Text('Name')),
+                  BsDataColumn(label: Text('Code'), columnName: 'typecd', columnData: 'typecd', width: 200.0),
+                  BsDataColumn(label: Text('Name'), columnName: 'typenm', columnData: 'typenm'),
                 ],
                 serverSide: loadApi,
               ),

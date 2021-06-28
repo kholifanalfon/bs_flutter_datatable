@@ -97,42 +97,6 @@ class _BsDatatableState extends State<BsDatatable> {
 
   void init() {
     widget.controller.refresh = () {
-      widget.controller.columns = [];
-      _currentColumns.forEach((column) {
-        String index = _currentColumns.indexOf(column).toString();
-        String columnData =
-            column.columnData != null ? column.columnData! : index;
-
-        widget.controller.columns.add({
-          'data': columnData,
-          'name': column.columnName != null ? column.columnName! : '',
-          'orderable': column.orderable.toString(),
-          'searchable': column.searchable.toString(),
-          'searchvalue': column.searchValue,
-          'searchregex': column.searchRegex
-        });
-
-        if (column.orderState.ordered) {
-          widget.controller.orders.add({
-            'column': columnData,
-            'dir': column.orderState.orderType,
-          });
-        }
-
-        if (widget.controller.orders.length == 0 && column.orderable) {
-          widget.controller.orders = [];
-          column.orderState =
-              BsOrderColumn(ordered: true, orderType: BsOrderColumn.asc);
-          widget.controller.orders.add({
-            'column': columnData,
-            'dir': column.orderState.orderType,
-          });
-        }
-      });
-
-      setState(() {
-        _processing = true;
-      });
       widget.serverSide(widget.controller.toJson()).then((value) {
         setState(() {
           _processing = false;
@@ -143,6 +107,43 @@ class _BsDatatableState extends State<BsDatatable> {
 
     _currentColumns = List<BsDataColumn>.from(widget.columns);
     _inputLength.text = widget.controller.length.toString();
+
+    widget.controller.columns = [];
+    _currentColumns.forEach((column) {
+      String index = _currentColumns.indexOf(column).toString();
+      String columnData =
+      column.columnData != null ? column.columnData! : index;
+
+      widget.controller.columns.add({
+        'data': columnData,
+        'name': column.columnName != null ? column.columnName! : '',
+        'orderable': column.orderable.toString(),
+        'searchable': column.searchable.toString(),
+        'searchvalue': column.searchValue,
+        'searchregex': column.searchRegex
+      });
+
+      if (column.orderState.ordered) {
+        widget.controller.orders.add({
+          'column': index,
+          'dir': column.orderState.orderType,
+        });
+      }
+
+      if (widget.controller.orders.length == 0 && column.orderable) {
+        widget.controller.orders = [];
+        column.orderState =
+            BsOrderColumn(ordered: true, orderType: BsOrderColumn.asc);
+        widget.controller.orders.add({
+          'column': columnData,
+          'dir': column.orderState.orderType,
+        });
+      }
+    });
+
+    setState(() {
+      _processing = true;
+    });
 
     widget.controller.refresh();
   }
@@ -412,9 +413,7 @@ class _BsDatatableState extends State<BsDatatable> {
                     BsOrderColumn(ordered: true, orderType: dir);
 
                 widget.controller.orders.add({
-                  'column': column.columnData != null
-                      ? column.columnData!
-                      : _currentColumns.indexOf(column).toString(),
+                  'column': _currentColumns.indexOf(column).toString(),
                   'dir': dir
                 });
                 widget.controller.refresh();
@@ -635,7 +634,7 @@ class _BsDatatableState extends State<BsDatatable> {
           ));
         }
 
-        if (countPage > 0) {
+        if (countPage > 1) {
           _pagination.add(BsPaginateButton(
             style: widget.stylePagination,
             active: currentPage == countPage - 1,

@@ -25,7 +25,7 @@ class ExampleSource extends BsDatatableSource {
     return BsDataRow(index: index, cells: <BsDataCell>[
       BsDataCell(Text('${_response.start + index + 1}')),
       BsDataCell(Text('${_response.data[index]['typecd']}')),
-      BsDataCell(Text('${_response.data[index]['typename']}')),
+      BsDataCell(Text('${_response.data[index]['typenm']}')),
     ]);
   }
 }
