@@ -56,11 +56,9 @@ class _MyAppState extends State<MyApp> {
                 searchable: true,
                 pageLength: true,
                 paginations: [
-                  'firstPage',
                   'previous',
                   'button',
                   'next',
-                  'lastPage'
                 ],
                 columns: <BsDataColumn>[
                   BsDataColumn(

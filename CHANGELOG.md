@@ -1,3 +1,7 @@
+## 1.0.2
+
+* Minor bug fixed
+
 ## 1.0.1
 
 * Remove append(Left, Right) header/footer, prepend(Left, Right) header/footer

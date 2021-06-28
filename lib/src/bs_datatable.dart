@@ -155,7 +155,9 @@ class _BsDatatableState extends State<BsDatatable> {
 
   String replaceText(String text) {
     String start =
-        text.replaceAll('__START__', (widget.controller.start + 1).toString());
+        text.replaceAll('__START__', ((widget.controller.searchValue == '' && widget.source.countData > 0)
+            || (widget.controller.searchValue != '' && widget.source.countFiltered > 0)
+            ? widget.controller.start + 1 : 0).toString());
     String end = start.replaceAll('__END__',
         (widget.controller.start + widget.source.countDataPage).toString());
     String data =
@@ -172,10 +174,12 @@ class _BsDatatableState extends State<BsDatatable> {
       text = replaceText(
           '${widget.language.information} (${widget.language.informationFiltered})');
 
-    return widget.textInfo != null
-        ? widget.textInfo!
-        : Text(text,
-            style: TextStyle(fontSize: 12.0).merge(widget.textInfoStyle));
+    return Row(children: [
+      Expanded(child: widget.textInfo != null
+          ? widget.textInfo!
+          : Text(text,
+          style: TextStyle(fontSize: 12.0).merge(widget.textInfoStyle)))
+    ]);
   }
 
   @override
@@ -210,9 +214,9 @@ class _BsDatatableState extends State<BsDatatable> {
                     xl: Col.col_3),
                 child: Row(
                   mainAxisAlignment:
-                      BreakPoint.of(context).state == BreakPoint.stateSm
-                          ? MainAxisAlignment.start
-                          : MainAxisAlignment.end,
+                    [BreakPoint.stateXs, BreakPoint.stateSm, BreakPoint.stateMd].contains(BreakPoint.of(context).state)
+                        ? MainAxisAlignment.start
+                        : MainAxisAlignment.end,
                   children: [
                     widget.pageLength == false
                         ? Container()
@@ -331,11 +335,12 @@ class _BsDatatableState extends State<BsDatatable> {
               BsCol(
                 margin: EdgeInsets.only(bottom: 10.0),
                 sizes: ColScreen(sm: Col.col_12, md: Col.col_6),
-                child: Scrollbar(
-                    child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Container(child: textInformation()),
-                )),
+                child: Container(
+                  alignment: [BreakPoint.stateXs, BreakPoint.stateSm, BreakPoint.stateMd].contains(BreakPoint.of(context).state)
+                      ? Alignment.center
+                      : Alignment.centerLeft,
+                  child: textInformation(),
+                ),
               ),
               BsCol(
                 margin: EdgeInsets.only(bottom: 10.0),
@@ -345,7 +350,9 @@ class _BsDatatableState extends State<BsDatatable> {
                   children: [
                     Expanded(
                         child: Container(
-                      alignment: Alignment.centerRight,
+                      alignment: [BreakPoint.stateXs, BreakPoint.stateSm, BreakPoint.stateMd].contains(BreakPoint.of(context).state)
+                          ? Alignment.center
+                          : Alignment.centerRight,
                       child: Scrollbar(
                           child: SingleChildScrollView(
                         scrollDirection: Axis.horizontal,

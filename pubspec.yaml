@@ -1,6 +1,6 @@
 name: bs_flutter_datatable
 description: Simple way to show data using datatable response with serverside processing
-version: 1.0.1
+version: 1.0.2
 homepage: https://github.com/kholifanalfon/bs_flutter_datatable.git
 
 environment:
