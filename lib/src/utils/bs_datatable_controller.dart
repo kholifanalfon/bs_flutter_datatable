@@ -1,7 +1,3 @@
-import 'dart:convert';
-
-import 'package:flutter/cupertino.dart';
-
 class BsDatatableController {
   BsDatatableController({
     this.draw = 1,
@@ -27,8 +23,10 @@ class BsDatatableController {
 
   List<Map<String, String>> columns;
 
-  late VoidCallback refresh;
+  Function? _reload;
 
+  /// Before processing serverSide requests, datatable
+  /// configuration must be converted to json
   Map<String, String> toJson() {
     Map<String, String> json = Map<String, String>();
     json.addAll({'draw': draw.toString()});
@@ -74,10 +72,25 @@ class BsDatatableController {
       json.addAll({
         'order[${orders.indexOf(order)}][column]': order['column'].toString()
       });
-      json.addAll(
-          {'order[${orders.indexOf(order)}][dir]': order['dir'].toString()});
+      json.addAll({
+        'order[${orders.indexOf(order)}][dir]': order['dir'].toString()
+      });
     });
 
     return json;
+  }
+
+  /// Reloading data with create serverSide reqeust
+  void reload() {
+    if(_reload == null)
+      print('Failed to reload data: Undefined event reload listener');
+
+    else
+      _reload!();
+  }
+
+  /// Set reload listener function
+  void onReloadListener(Function function) {
+    _reload = function;
   }
 }

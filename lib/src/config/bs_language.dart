@@ -25,7 +25,19 @@ class BsDatatableLanguage {
 
   final String nextPagination;
 
+  /// To customize information data message, you can use this word
+  /// the system will replaced with avaible data
+  /// - __START__
+  /// - __END__
+  /// - __FILTERED__
+  /// - __DATA__
   final String information;
 
+  /// To customize information on search data message, you can use this word
+  /// the system will replaced with avaible data
+  /// - __START__
+  /// - __END__
+  /// - __FILTERED__
+  /// - __DATA__
   final String informationFiltered;
 }
