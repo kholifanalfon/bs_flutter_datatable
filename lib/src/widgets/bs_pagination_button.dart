@@ -30,19 +30,21 @@ class BsPaginationButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: margin,
-      child: TextButton(
-        style: TextButton.styleFrom(
-          minimumSize: style.minimumSize,
-        ),
-        onPressed: onPressed,
-        child: Container(
-          padding: style.padding,
-          decoration: active ? style.activeDecoration : style.decoration,
-          child: Text(label,
-            style: TextStyle(
-              fontSize: 12.0,
-              color: disabled ? Colors.grey : Theme.of(context).textTheme.bodyText1!.color
-            ).merge(active ? style.textStyleActive : style.textStyle)),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onPressed,
+          borderRadius: style.borderRadius,
+          child: Container(
+            padding: style.padding,
+            decoration: active ? style.activeDecoration : style.decoration,
+            child: Text(label,
+              style: TextStyle(
+                fontSize: 12.0,
+                color: disabled ? Colors.grey : Theme.of(context).textTheme.bodyText1!.color
+              ).merge(active ? style.textStyleActive : style.textStyle)
+            ),
+          ),
         ),
       ),
     );

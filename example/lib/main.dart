@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:bs_flutter_card/bs_flutter_card.dart';
 import 'package:bs_flutter_datatable/bs_flutter_datatable.dart';
 import 'package:bs_flutter_datatable_example/source.dart';
+import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -10,14 +11,60 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
+
+  final _router = FluroRouter.appRouter;
+
+  MyApp() {
+    _router.define('/', handler: Handler(
+      handlerFunc: (context, parameters) => Datatables(),
+    ));
+    _router.define('/test', handler: Handler(
+      handlerFunc: (context, parameters) => Test(),
+    ));
+  }
+
   @override
-  _MyAppState createState() => _MyAppState();
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Testing',
+      debugShowCheckedModeBanner: false,
+      initialRoute: '/',
+      onGenerateRoute: _router.generator,
+    );
+  }
 }
 
-class _MyAppState extends State<MyApp> {
+class Test extends StatelessWidget {
+
+  final _router = FluroRouter.appRouter;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        child: Column(
+          children: [
+            TextButton(
+              onPressed: () => _router.navigateTo(context, '/'),
+              child: Text('Test'),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class Datatables extends StatefulWidget {
+  @override
+  _DatatablesState createState() => _DatatablesState();
+}
+
+class _DatatablesState extends State<Datatables> {
 
   ExampleSource _source = ExampleSource();
+  final _router = FluroRouter.appRouter;
 
   @override
   void initState() {
@@ -53,13 +100,17 @@ class _MyAppState extends State<MyApp> {
               padding: EdgeInsets.all(20.0),
               child: BsCard(
                 children: [
-                  BsCardContainer(title: Text('Datatables')),
+                  BsCardContainer(title: Text('Datatables'), actions: [
+                    TextButton(
+                      onPressed: () => _router.navigateTo(context, '/test'),
+                      child: Text('Test'),
+                    )
+                  ]),
                   BsCardContainer(
                     child: BsDatatable(
                       source: _source,
                       title: Text('Datatables Data'),
                       columns: ExampleSource.columns,
-                      pagination: BsPagination.input,
                       language: BsDatatableLanguage(
                         nextPagination: 'Next',
                         previousPagination: 'Previous',

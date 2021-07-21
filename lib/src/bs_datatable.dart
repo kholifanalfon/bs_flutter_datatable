@@ -160,6 +160,7 @@ class _BsDatatableState extends State<BsDatatable> {
       });
 
       if (column.orderState.ordered) {
+        widget.source.controller.orders = [];
         widget.source.controller.orders.add({
           'column': index,
           'dir': column.orderState.orderType,
@@ -224,6 +225,7 @@ class _BsDatatableState extends State<BsDatatable> {
     _currentColumns.forEach((column) {
       _columns.add(TextButton(
         style: TextButton.styleFrom(
+          padding: EdgeInsets.zero,
           minimumSize: Size(double.infinity, 10.0),
         ),
         onPressed: column.orderable == false ? null : () {
@@ -785,7 +787,7 @@ class _BsDatatableState extends State<BsDatatable> {
 
   Widget _footerSmallDevice() {
     return Container(
-      alignment: Alignment.centerLeft,
+      alignment: Alignment.center,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,

@@ -1,5 +1,6 @@
-## 1.1.0
+## 1.1.2
 
+* Mobile padding bug fixed
 * Property `pageLength` and `searchable` has been removed, to hide/show you can use `customizeLayout`
 * Adding properties `cutomizeLayout` to customize table, pageLength, and etc layout position
 * Property `controller` merge to property source class
@@ -10,6 +11,7 @@
 * Rename class `BsPaginateButton` to `BsPaginationButton`
 * Rename class `BsPaginateButtonStyle` to `BsPaginationButtonStyle`
 * Fixed responsive and pagination issue
+* Minor bug fixed
 
 ## 1.0.4
 

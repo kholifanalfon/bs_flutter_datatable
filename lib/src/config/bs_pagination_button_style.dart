@@ -11,6 +11,7 @@ class BsPaginationButtonStyle {
     this.activeDecoration = const BoxDecoration(
         color: Colors.blueAccent,
         borderRadius: BorderRadius.all(Radius.circular(50.0))),
+    this.borderRadius = const BorderRadius.all(Radius.circular(50.0))
   });
 
   final TextStyle textStyle;
@@ -24,4 +25,6 @@ class BsPaginationButtonStyle {
   final BoxDecoration decoration;
 
   final BoxDecoration activeDecoration;
+
+  final BorderRadius borderRadius;
 }
