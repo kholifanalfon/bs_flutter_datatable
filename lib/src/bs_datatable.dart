@@ -139,7 +139,6 @@ class _BsDatatableState extends State<BsDatatable> {
           });
         });
       } else {
-        print(jsonEncode(widget.source.response.data));
         _updateState(() { });
       }
     });
