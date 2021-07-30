@@ -3,7 +3,9 @@ import 'package:bs_flutter_datatable/bs_flutter_datatable.dart';
 abstract class BsDatatableSource {
 
   /// Variable to handle response from jQuery datatable.net
-  BsDatatableResponse response = BsDatatableResponse();
+  BsDatatableResponse response = BsDatatableResponse(
+    data: List.from([])
+  );
 
   /// Variable to save datatable config
   BsDatatableController controller = BsDatatableController();

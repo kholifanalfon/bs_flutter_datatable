@@ -89,19 +89,20 @@ class BsDataColumn extends StatelessWidget {
                 alignment: alignment,
                 padding: padding,
                 decoration: BoxDecoration(
-                    border: border != null ? border! : Border(
-                      top: BorderSide(color: Color(0xffdedede)),
-                      bottom: BorderSide(color: Color(0xffdedede), width: 2.0),
-                    )
+                  border: border != null ? border! : Border(
+                    top: BorderSide(color: Color(0xffdedede)),
+                    bottom: BorderSide(color: Color(0xffdedede), width: 2.0),
+                  )
                 ),
                 child: DefaultTextStyle(
                   style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 12.0,
-                      fontWeight: FontWeight.bold
+                    color: Colors.grey,
+                    fontSize: 12.0,
+                    fontWeight: FontWeight.bold
                   ).merge(textStyle),
                   child: Row(children: [
-                    Expanded(child: label), orderIcon(context)
+                    Expanded(child: label),
+                    orderIcon(context)
                   ]),
                 ),
               )),

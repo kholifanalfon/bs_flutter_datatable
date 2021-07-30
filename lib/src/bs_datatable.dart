@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:bs_flutter_datatable/bs_flutter_datatable.dart';
 import 'package:bs_flutter_utils/bs_flutter_utils.dart';
@@ -11,13 +12,15 @@ import 'package:flutter/services.dart';
 /// function have [BsDatatable] state
 typedef BsDatatableBuilder<T> = Widget Function(_BsDatatableState _);
 
+typedef BsDatatableOnRowPressed<int, T> = Function(int i, List<BsDataCell> cells);
+
 /// Widget class to create datatable configuration
 class BsDatatable extends StatefulWidget {
   const BsDatatable({
     Key? key,
     required this.source,
     required this.columns,
-    required this.serverSide,
+    this.serverSide,
     this.customizeLayout,
     this.width,
     this.hintStyleSearch,
@@ -31,6 +34,7 @@ class BsDatatable extends StatefulWidget {
     this.style = const BsDatatableStyle(),
     this.stylePagination = const BsPaginationButtonStyle(),
     this.language = const BsDatatableLanguage(),
+    this.onRowPressed,
   }) : super(key: key);
 
   @override
@@ -94,6 +98,8 @@ class BsDatatable extends StatefulWidget {
 
   /// Set style of pagination button [BsDattable]
   final BsPaginationButtonStyle stylePagination;
+
+  final BsDatatableOnRowPressed? onRowPressed;
 }
 
 class _BsDatatableState extends State<BsDatatable> {
@@ -106,13 +112,15 @@ class _BsDatatableState extends State<BsDatatable> {
 
   late List<BsDataColumn> _currentColumns;
 
+  Map<int, bool> _isHover = Map<int, bool>();
+
   @override
   void initState() {
     init();
     super.initState();
   }
 
-  void _updateState(Function function) {
+  void _updateState(VoidCallback function) {
     if(mounted)
       setState(() => function());
   }
@@ -130,6 +138,9 @@ class _BsDatatableState extends State<BsDatatable> {
             _inputPage.text = ((widget.source.controller.start/widget.source.controller.length).ceil() + 1).toString();
           });
         });
+      } else {
+        print(jsonEncode(widget.source.response.data));
+        _updateState(() { });
       }
     });
 
@@ -213,7 +224,7 @@ class _BsDatatableState extends State<BsDatatable> {
 
       else if ([BreakPoint.stateXs, BreakPoint.stateSm, BreakPoint.stateMd]
           .contains(BreakPoint.of(context).state))
-        _columnsWidths.addAll({_currentColumns.indexOf(column): FixedColumnWidth(200)});
+        _columnsWidths.addAll({_currentColumns.indexOf(column): FixedColumnWidth(300.0)});
     });
 
     return _columnsWidths;
@@ -271,13 +282,43 @@ class _BsDatatableState extends State<BsDatatable> {
     ));
 
     for (int i = 0; i < widget.source.countDataPage; i++) {
+      if(!_isHover.containsKey(i))
+        _isHover[i] = false;
+
+      List<BsDataCell> cells = widget.source.getRow(i).getCells();
+      List<Widget> children = List<Widget>.from([]);
+      cells.forEach((cell) {
+        children.add(Material(
+          color: Colors.transparent,
+          child: InkWell(
+            child: cell,
+            onTap: widget.onRowPressed == null ? null : () {
+              if(widget.onRowPressed != null)
+                widget.onRowPressed!(i, cells);
+            },
+            onHover: (value) {
+              _updateState(() {
+                _isHover[i] = value;
+              });
+            },
+            splashColor: Colors.transparent,
+            hoverColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            focusColor: Colors.transparent,
+          ),
+        ));
+      });
+
+      Color backgroundColor = i % 2 == 0 ? Colors.transparent : widget.style.color;
+
       _tableRows.add(TableRow(
         decoration: BoxDecoration(
+          color: _isHover[i]! ? widget.style.hoverColor : backgroundColor,
           border: Border(
             bottom: BorderSide(color: widget.style.borderColor),
           )
         ),
-        children: widget.source.getRow(i).getCells()
+        children: children
       ));
     }
 
@@ -394,9 +435,9 @@ class _BsDatatableState extends State<BsDatatable> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
+        widget.language.perPageLabel == null ? Container() : Container(
           margin: EdgeInsets.only(bottom: 2.0),
-          child: Text(widget.language.perPageLabel,
+          child: Text(widget.language.perPageLabel!,
               style: TextStyle(fontSize: 10.0)
           ),
         ),
@@ -452,9 +493,9 @@ class _BsDatatableState extends State<BsDatatable> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
+          widget.language.searchLabel == null ? Container() : Container(
             margin: EdgeInsets.only(bottom: 2.0),
-            child: Text(widget.language.searchLabel, style: TextStyle(
+            child: Text(widget.language.searchLabel!, style: TextStyle(
                 fontSize: 10.0
             )),
           ),
@@ -793,6 +834,7 @@ class _BsDatatableState extends State<BsDatatable> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
+            padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
             margin: EdgeInsets.only(bottom: 10.0),
             child: Row(
               mainAxisSize: MainAxisSize.min,

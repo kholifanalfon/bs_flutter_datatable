@@ -12,7 +12,11 @@ class BsDataCell extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(15.0),
-      child: child,
+      child: Row(
+        children: [
+          Expanded(child: Container(child: child))
+        ],
+      ),
     );
   }
 }

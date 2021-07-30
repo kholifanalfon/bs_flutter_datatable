@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 void main() {
-  runApp(MyApp());
+  runApp(MaterialApp(home: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -64,7 +64,7 @@ class Datatables extends StatefulWidget {
 class _DatatablesState extends State<Datatables> {
 
   ExampleSource _source = ExampleSource();
-  final _router = FluroRouter.appRouter;
+  ExampleSource _source1 = ExampleSource();
 
   @override
   void initState() {
@@ -102,8 +102,12 @@ class _DatatablesState extends State<Datatables> {
                 children: [
                   BsCardContainer(title: Text('Datatables'), actions: [
                     TextButton(
-                      onPressed: () => _router.navigateTo(context, '/test'),
-                      child: Text('Test'),
+                      onPressed: () {
+                        print(_source1.response.data is List);
+                        _source1.response.data.add({'typecd': '', 'typename': ''});
+                        _source1.controller.reload();
+                      },
+                      child: Text('Add Row'),
                     )
                   ]),
                   BsCardContainer(
@@ -119,10 +123,17 @@ class _DatatablesState extends State<Datatables> {
                         firstPagination: 'First Page',
                         lastPagination: 'Last Page',
                         hintTextSearch: 'Search data ...',
-                        perPageLabel: 'Page Length',
-                        searchLabel: 'Search Form'
+                        perPageLabel: null,
+                        searchLabel: null
                       ),
                       serverSide: loadApi,
+                    ),
+                  ),
+                  BsCardContainer(
+                    child: BsDatatable(
+                      source: _source1,
+                      title: Text('Datatables Data'),
+                      columns: ExampleSource.columns,
                     ),
                   )
                 ],

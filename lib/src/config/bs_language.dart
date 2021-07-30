@@ -11,9 +11,9 @@ class BsDatatableLanguage {
     this.informationFiltered = 'filtered from __DATA__ total enteries',
   });
 
-  final String perPageLabel;
+  final String? perPageLabel;
 
-  final String searchLabel;
+  final String? searchLabel;
 
   final String hintTextSearch;
 
