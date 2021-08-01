@@ -64,7 +64,15 @@ class Datatables extends StatefulWidget {
 class _DatatablesState extends State<Datatables> {
 
   ExampleSource _source = ExampleSource();
-  ExampleSource _source1 = ExampleSource();
+  ExampleSource _source1 = ExampleSource(
+    data: [
+      {'typeid': 0, 'typecd': 'TP1', 'typenm': 'Type 1'},
+      {'typeid': 0, 'typecd': 'TP2', 'typenm': 'Type 2'},
+      {'typeid': 0, 'typecd': 'TP3', 'typenm': 'Type 3'},
+      {'typeid': 0, 'typecd': 'TP4', 'typenm': 'Type 4'},
+      {'typeid': 0, 'typecd': 'TP5', 'typenm': 'Type 5'},
+    ]
+  );
 
   @override
   void initState() {
@@ -80,8 +88,17 @@ class _DatatablesState extends State<Datatables> {
       Map<String, dynamic> json = jsonDecode(value.body);
       setState(() {
         _source.response = BsDatatableResponse.createFromJson(json['data']);
-        _source.onEditListener = (typeid) {
+        _source.onEditListener = (typeid, index) {
           _source.controller.reload();
+        };
+        _source1.onEditListener = (typeid, index) {
+          final data = _source1.get(index);
+          data['typenm'] = 'Edited';
+
+          _source1.put(index, data);
+        };
+        _source1.onDeleteListener = (typeid, index) {
+          _source1.removeAt(index);
         };
       });
     });
@@ -103,9 +120,7 @@ class _DatatablesState extends State<Datatables> {
                   BsCardContainer(title: Text('Datatables'), actions: [
                     TextButton(
                       onPressed: () {
-                        print(_source1.response.data is List);
-                        _source1.response.data.add({'typecd': '', 'typename': ''});
-                        _source1.controller.reload();
+                        _source1.add({'typecd': 'TP1', 'typenm': 'Type ${_source1.datas.length}'});
                       },
                       child: Text('Add Row'),
                     )

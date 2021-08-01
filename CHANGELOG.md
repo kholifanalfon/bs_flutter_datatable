@@ -1,3 +1,7 @@
+## 1.2.0
+
+* Showing data from List
+
 ## 1.1.3
 
 * Mobile padding bug fixed

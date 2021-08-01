@@ -4,8 +4,12 @@ import 'package:flutter/material.dart';
 
 class ExampleSource extends BsDatatableSource {
 
-  ValueChanged<dynamic> onEditListener = (value) {};
-  ValueChanged<dynamic> onDeleteListener = (value) {};
+  ExampleSource({
+    List? data,
+  }) : super(data: data);
+
+  Function(dynamic, int) onEditListener = (value, index) {};
+  Function(dynamic, int) onDeleteListener = (value, index) {};
 
   static List<BsDataColumn> get columns => <BsDataColumn>[
     BsDataColumn(label: Text('No'), orderable: false, searchable: false, width: 100.0),
@@ -24,13 +28,13 @@ class ExampleSource extends BsDatatableSource {
         children: [
           BsButton(
             margin: EdgeInsets.only(right: 5.0),
-            onPressed: () => onEditListener(response.data[index]['typecd']),
+            onPressed: () => onEditListener(response.data[index]['typecd'], index),
             prefixIcon: Icons.edit,
             size: BsButtonSize.btnIconSm,
             style: BsButtonStyle.primary,
           ),
           BsButton(
-            onPressed: () => onEditListener(response.data[index]['typecd']),
+            onPressed: () => onDeleteListener(response.data[index]['typecd'], index),
             prefixIcon: Icons.delete,
             size: BsButtonSize.btnIconSm,
             style: BsButtonStyle.danger,

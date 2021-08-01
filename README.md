@@ -194,3 +194,54 @@ To reload data you can use reload function
 ```dart
 _source.controller.reload();
 ```
+
+If you want to show data from List variable, you can add `data` to constructor source
+
+```dart
+class ExampleSource extends BsDatatableSource {
+
+  ExampleSource({
+    List? data,
+  }) : super(data: data);
+
+// ....
+}
+```
+
+And now you cant set List variable in your widget
+
+```dart
+class Datatables extends StatefulWidget {
+  @override
+  _DatatablesState createState() => _DatatablesState();
+}
+
+class _DatatablesState extends State<Datatables> {
+
+  ExampleSource _source1 = ExampleSource(
+    data: [
+      {'typecd': 'TP1', 'typenm': 'Type 1'},
+      {'typecd': 'TP2', 'typenm': 'Type 2'},
+      {'typecd': 'TP3', 'typenm': 'Type 3'},
+      {'typecd': 'TP4', 'typenm': 'Type 4'},
+      {'typecd': 'TP5', 'typenm': 'Type 5'},
+    ]
+  );
+
+// ....
+
+}
+```
+
+If you want to add data dynamicaly from button or anything, you can call method `add` or `addAll`. And if you want to update you call method `put` for remove call method `remove` or `removeAt`
+
+```dart
+// ...
+    TextButton(
+      onPressed: () {
+        _source1.add({'typecd': 'TP1', 'typenm': 'Type ${_source1.datas.length}'});
+      },
+      child: Text('Add Row'),
+    )
+// ...
+```
