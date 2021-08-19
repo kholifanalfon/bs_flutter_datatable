@@ -81,16 +81,16 @@ class BsDatatableController {
   }
 
   /// Reloading data with create serverSide reqeust
-  void reload() {
+  void reload({bool load = true}) {
     if(_reload == null)
       print('Failed to reload data: Undefined event reload listener');
 
     else
-      _reload!();
+      _reload!(load);
   }
 
   /// Set reload listener function
-  void onReloadListener(Function function) {
+  void onReloadListener(Function(bool load) function) {
     _reload = function;
   }
 }

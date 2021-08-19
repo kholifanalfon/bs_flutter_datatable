@@ -3,28 +3,22 @@ import 'package:bs_flutter_datatable/bs_flutter_datatable.dart';
 abstract class BsDatatableSource {
 
   BsDatatableSource({
-    List? data,
+    List data = const [],
     BsDatatableResponse? response,
     BsDatatableController? controller
   }) {
 
-    if(data != null)
-      datas = data;
-
     if(response == null)
-      response = BsDatatableResponse(
-          data: List.from([])
-      );
+      response = BsDatatableResponse(data: List.from([]));
 
     _response = response;
+    _response.data.insertAll(0, data);
 
     if(controller == null)
       controller = BsDatatableController();
 
     _controller = controller;
   }
-
-  List datas = List.from([]);
 
   /// Variable to handle response from jQuery datatable.net
   BsDatatableResponse _response = BsDatatableResponse(
@@ -54,64 +48,75 @@ abstract class BsDatatableSource {
 
   void update(List? values) {
     if(values != null)
-      datas = values;
+      response.data = values;
 
-    controller.reload();
+    controller.reload(load: false);
   }
 
   void clear() {
-    datas.clear();
+    response.data.clear();
 
-    controller.reload();
+    controller.reload(load: false);
+  }
+
+  void insert(int index, dynamic element) {
+    response.data.insert(index, element);
+    controller.reload(load: false);
   }
 
   void add(dynamic value) {
-    datas.add(value);
-    controller.reload();
+    response.data.add(value);
+    controller.reload(load: false);
   }
 
   dynamic get(int index) {
-    if(datas[index] != null)
-      return datas[index];
+    if(response.data[index] != null)
+      return response.data[index];
 
     return null;
   }
 
   void put(int index, dynamic value) {
-    if(datas[index] != null)
-      datas[index] = value;
+    if(response.data[index] != null)
+      response.data[index] = value;
 
-    controller.reload();
+    controller.reload(load: false);
   }
 
   void removeAt(int index) {
-    datas.removeAt(index);
-    controller.reload();
+    response.data.removeAt(index);
+    controller.reload(load: false);
   }
 
   void remove(dynamic value) {
-    datas.remove(value);
-    controller.reload();
+    response.data.remove(value);
+    controller.reload(load: false);
   }
 
   void addAll(List values) {
-    datas.addAll(values);
-    controller.reload();
+    response.data.addAll(values);
+    controller.reload(load: false);
+  }
+
+  void insertAll(int index, dynamic iterable) {
+    response.data.insertAll(index, iterable);
+    controller.reload(load: false);
   }
 
   void reload() {
-    List currentDataFiltered = datas.where((datas) {
+
+    List currentDataFiltered = response.data.where((data) {
       bool matched = false;
       for(int i = 0; i < controller.columns.length; i++) {
         bool datamatched = false;
         Map<String, String> column = controller.columns[i];
 
         if(column['searchable'] == 'true') {
-          if(datas[column['name']] != null) {
-            String data = datas[column['name']].toString().toLowerCase().trim();
+          if(data[column['name']] != null) {
+            String field = data[column['name']].toString().toLowerCase().trim();
             String value = controller.searchValue.toLowerCase().trim();
 
-            if(data.contains(value)) {
+            if(field.contains(value)) {
               datamatched = true;
             }
           }
@@ -129,7 +134,7 @@ abstract class BsDatatableSource {
     List currentData = currentDataFiltered.skip(controller.start).take(controller.length).toList();
     _response = BsDatatableResponse(
       data: currentData,
-      countData: datas.length,
+      countData: response.data.length,
       countFiltered: currentDataFiltered.length
     );
   }

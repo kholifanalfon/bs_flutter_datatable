@@ -1,6 +1,7 @@
-## 1.2.0
+## 1.2.1
 
 * Showing data from List
+* Add `add` dan `insert` method for data list
 
 ## 1.1.3
 

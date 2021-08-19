@@ -1,14 +1,14 @@
 /// Handle jquery datatable.net response format
 class BsDatatableResponse {
 
-  const BsDatatableResponse({
+  BsDatatableResponse({
     this.draw = 0,
     this.countData = 0,
     this.countFiltered = 0,
     this.data = const [],
   });
 
-  final List data;
+  List data;
 
   final int draw;
 

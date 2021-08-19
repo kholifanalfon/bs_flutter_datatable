@@ -124,24 +124,21 @@ class _BsDatatableState extends State<BsDatatable> {
   }
 
   void init() {
-    widget.source.controller.onReloadListener(() {
-      if (widget.serverSide != null) {
+    widget.source.controller.onReloadListener((load) {
+      if (load && widget.serverSide != null) {
         _updateState(() => _processing = true);
 
         widget.serverSide!(widget.source.controller.toJson()).then((value) {
+          widget.source.reload();
           _updateState(() {
             _processing = false;
             widget.source.controller.draw++;
-            _inputPage.text = ((widget.source.controller.start /
-                            widget.source.controller.length)
-                        .ceil() +
-                    1)
-                .toString();
+            _inputPage.text = ((widget.source.controller.start / widget.source.controller.length).ceil() + 1).toString();
           });
         });
       } else {
         widget.source.reload();
-        _updateState(() {});
+        _updateState(() { });
       }
     });
 

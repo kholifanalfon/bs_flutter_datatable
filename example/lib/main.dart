@@ -63,7 +63,11 @@ class Datatables extends StatefulWidget {
 
 class _DatatablesState extends State<Datatables> {
 
-  ExampleSource _source = ExampleSource();
+  ExampleSource _source = ExampleSource(
+    data: [
+      {'typeid': 0, 'typecd': 'TP1', 'typenm': 'Type Baru'},
+    ]
+  );
   ExampleSource _source1 = ExampleSource(
     data: [
       {'typeid': 0, 'typecd': 'TP1', 'typenm': 'Type 1'},
@@ -118,11 +122,20 @@ class _DatatablesState extends State<Datatables> {
               child: BsCard(
                 children: [
                   BsCardContainer(title: Text('Datatables'), actions: [
+                    Container(
+                      margin: EdgeInsets.only(right: 5.0),
+                      child: TextButton(
+                        onPressed: () {
+                          _source.insert(0, {'typecd': 'TP1', 'typenm': 'Type ${_source.response.data.length}'});
+                        },
+                        child: Text('Insert'),
+                      ),
+                    ),
                     TextButton(
                       onPressed: () {
-                        _source1.add({'typecd': 'TP1', 'typenm': 'Type ${_source1.datas.length}'});
+                        _source.add({'typecd': 'TP1', 'typenm': 'Type ${_source.response.data.length}'});
                       },
-                      child: Text('Add Row'),
+                      child: Text('Add'),
                     )
                   ]),
                   BsCardContainer(
@@ -145,6 +158,23 @@ class _DatatablesState extends State<Datatables> {
                     ),
                   ),
                   BsCardContainer(
+                    actions: [
+                      Container(
+                        margin: EdgeInsets.only(right: 5.0),
+                        child: TextButton(
+                          onPressed: () {
+                            _source1.insert(0, {'typecd': 'TP1', 'typenm': 'Type ${_source.response.data.length}'});
+                          },
+                          child: Text('Insert'),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          _source1.add({'typecd': 'TP1', 'typenm': 'Type ${_source1.response.data.length}'});
+                        },
+                        child: Text('Add'),
+                      )
+                    ],
                     child: BsDatatable(
                       source: _source1,
                       title: Text('Datatables Data'),

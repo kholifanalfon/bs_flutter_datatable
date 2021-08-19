@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class ExampleSource extends BsDatatableSource {
 
   ExampleSource({
-    List? data,
+    List data = const [],
   }) : super(data: data);
 
   Function(dynamic, int) onEditListener = (value, index) {};
