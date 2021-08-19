@@ -2,6 +2,7 @@
 
 * Showing data from List
 * Add `add` dan `insert` method for data list
+* Add customize cell padding and alignment
 
 ## 1.1.3
 
