@@ -13,3 +13,4 @@ export 'src/widgets/bs_data_column.dart';
 export 'src/widgets/bs_data_cell.dart';
 export 'src/widgets/bs_pagination_button.dart';
 export 'src/bs_datatable.dart';
+export 'src/contracts/bs_datatable_element.dart';
